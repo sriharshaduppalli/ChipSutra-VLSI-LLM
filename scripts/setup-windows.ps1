@@ -1,4 +1,4 @@
-# ChipSutra-VLSI-LLM — ensure Ollama exists, build model tag(s)
+# ChipSutra-VLSI-LLM - ensure Ollama exists, build model tag(s)
 param(
     [switch]$InstallDependencies,
     [ValidateSet('1.5b', '3b', '7b', 'all')]
@@ -9,16 +9,41 @@ $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $Root
 
-function Test-Cmd($name) {
-    return [bool](Get-Command $name -ErrorAction SilentlyContinue)
+function Refresh-SessionPath {
+    $machine = [System.Environment]::GetEnvironmentVariable('Path', 'Machine')
+    $user = [System.Environment]::GetEnvironmentVariable('Path', 'User')
+    $env:Path = "$machine;$user"
+    $ollamaDir = Join-Path $env:LOCALAPPDATA 'Programs\Ollama'
+    if (Test-Path $ollamaDir) {
+        $env:Path = "$env:Path;$ollamaDir"
+    }
+}
+
+function Get-OllamaExe {
+    Refresh-SessionPath
+    $cmd = Get-Command ollama -ErrorAction SilentlyContinue
+    if ($cmd) { return $cmd.Source }
+    $local = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'
+    if (Test-Path $local) { return $local }
+    return $null
+}
+
+function Invoke-Ollama {
+    param([Parameter(ValueFromRemainingArguments = $true)][string[]]$Args)
+    $exe = Get-OllamaExe
+    if (-not $exe) { throw 'ollama not found on PATH. Open a NEW PowerShell window or log out/in after install.' }
+    & $exe @Args
+    if ($LASTEXITCODE -ne 0) { throw "ollama failed: $Args" }
 }
 
 function Ensure-Ollama {
-    if (Test-Cmd ollama) { return $true }
+    if (Get-OllamaExe) { return $true }
     if (-not $InstallDependencies) {
-        Write-Host 'Ollama not found. Re-run with -InstallDependencies:'
-        Write-Host '  .\scripts\setup-windows.ps1 -InstallDependencies'
-        Write-Host 'Or: https://ollama.com/download'
+        Write-Host 'Ollama not found in this terminal.'
+        Write-Host 'Fix: close PowerShell, open a NEW window, then run:'
+        Write-Host "  cd $Root"
+        Write-Host "  .\setup.ps1 -Tag $Tag"
+        Write-Host 'Or: .\setup.ps1 -InstallDependencies -Tag 3b'
         return $false
     }
     if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
@@ -26,18 +51,26 @@ function Ensure-Ollama {
         return $false
     }
     Write-Host 'Installing Ollama via winget...'
-    winget install -e --id Ollama.Ollama --accept-package-agreements --accept-source-agreements
-    Write-Host 'Ollama installed. Open a NEW PowerShell window, then re-run this script.'
+    & winget install -e --id Ollama.Ollama --accept-package-agreements --accept-source-agreements
+    Refresh-SessionPath
+    if (Get-OllamaExe) {
+        Write-Host 'Ollama is available in this session.'
+        return $true
+    }
+    Write-Host ''
+    Write-Host 'Ollama installed. Start the Ollama app from the Start menu, then open a NEW PowerShell and run:'
+    Write-Host "  cd $Root"
+    Write-Host "  .\setup.ps1 -Tag $Tag"
     return $false
 }
 
-if (-not (Ensure-Ollama)) { exit 0 }
+if (-not (Ensure-Ollama)) { return }
 
 function Build-Tag($t, $base, $file) {
     Write-Host "pull $base ..."
-    ollama pull $base
+    Invoke-Ollama pull $base
     Write-Host "create chipsutra-vlsi:$t ..."
-    ollama create "chipsutra-vlsi:$t" -f $file
+    Invoke-Ollama create "chipsutra-vlsi:$t" -f $file
 }
 
 $map = @{
