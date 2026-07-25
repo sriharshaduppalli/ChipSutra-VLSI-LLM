@@ -14,7 +14,21 @@ This repository defines **custom Ollama models** built on open-weight [Qwen2.5-C
 
 All weights stay on your machine via [Ollama](https://ollama.com/). You only download open models from Ollama’s library once per base tag.
 
-## Quick start
+## Dependencies
+
+| Required | Optional |
+|----------|----------|
+| [Ollama](https://ollama.com/) only | GPU drivers for faster inference |
+| Internet **once** to pull `qwen2.5-coder:*` base weights | ChipSutra app (separate repo) |
+
+No Python, Node, Anthropic, OpenAI, or Emergent accounts. No API tokens after bases are downloaded.
+
+## Integrated with ChipSutra
+
+Docker Compose in [ChipSutra](https://github.com/sriharshaduppalli/ChipSutra) **vendors** these Modelfiles under `models/chipsutra-vlsi/` and runs `ollama create` on first startup — you do **not** need to clone this repo for the default stack.
+
+Clone this repo only if you want to rebuild tags manually or use ChipSutra-VLSI in other tools (Open WebUI, scripts, etc.).
+
 
 ### Windows (PowerShell)
 
