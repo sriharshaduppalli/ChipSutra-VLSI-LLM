@@ -30,13 +30,19 @@ Docker Compose in [ChipSutra](https://github.com/sriharshaduppalli/ChipSutra) **
 Clone this repo only if you want to rebuild tags manually or use ChipSutra-VLSI in other tools (Open WebUI, scripts, etc.).
 
 
-### Windows (PowerShell)
+## Quick start
+
+**Only dependency:** [Ollama](https://ollama.com/). The repo can install it on Windows via `winget` — no Python, Node, or API keys.
+
+### Windows
 
 ```powershell
 git clone https://github.com/sriharshaduppalli/ChipSutra-VLSI-LLM.git
 cd ChipSutra-VLSI-LLM
-.\scripts\create-all.ps1
+.\setup.ps1 -InstallDependencies -Tag 3b
 ```
+
+Default tag `3b` matches ChipSutra Docker. Use `-Tag all` for 1.5b/3b/7b.
 
 ### Linux / macOS
 
