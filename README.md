@@ -107,10 +107,12 @@ LICENSE              MIT
 
 ## Updating the model
 
-1. Edit `prompts/vlsi_system.txt` or a `modelfiles/Modelfile.*`.
-2. Bump `VERSION` in the Modelfile comment.
+1. Edit `prompts/vlsi_system.txt`, `prompts/vlsi_protocols_compact.txt`, or a `modelfiles/Modelfile.*`.
+2. Bump **`VERSION`** in repo root (semver).
 3. Re-run `scripts/create-all.sh` (or one size).
-4. Open a PR — ChipSutra syncs `models/chipsutra-vlsi/` from releases.
+4. Sync ChipSutra: `scripts/sync-vlsi-llm.sh` in [ChipSutra](https://github.com/sriharshaduppalli/ChipSutra) or GitHub Action **Sync ChipSutra-VLSI modelfiles**.
+
+Accuracy roadmap: [docs/ACCURACY_AND_KNOWLEDGE.md](./docs/ACCURACY_AND_KNOWLEDGE.md).
 
 ## License
 
