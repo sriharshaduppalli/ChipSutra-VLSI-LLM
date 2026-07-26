@@ -2,9 +2,14 @@
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 Set-Location $Root
+$Version = (Get-Content (Join-Path $Root 'VERSION') -Raw).Trim()
+Write-Host "Building ChipSutra-VLSI VERSION=$Version"
 
 function New-ChipSutraModel {
     param([string]$Tag, [string]$Base, [string]$Modelfile)
+    if (-not (Select-String -Path $Modelfile -SimpleMatch "v$Version" -Quiet)) {
+        throw "$Modelfile header does not match VERSION=$Version"
+    }
     Write-Host "pull $Base ..."
     ollama pull $Base
     Write-Host "create chipsutra-vlsi:$Tag ..."

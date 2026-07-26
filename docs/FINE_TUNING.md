@@ -19,7 +19,12 @@ For a **custom weight delta** (LoRA), run entirely on your GPU:
 
 ## Path B — Keep prompt-only (current repo)
 
-Update `prompts/vlsi_system.txt` and rebuild with `scripts/create-all.sh`. No GPU required.
+1. Edit **`modelfiles/Modelfile.*`** inline `SYSTEM` (and keep `prompts/vlsi_system.txt` as the human reference).
+2. Expand RAG knowledge in `prompts/vlsi_*.txt` for ChipSutra sync.
+3. Bump **`VERSION`**, update **`CHANGELOG.md`**, run `scripts/create-all.sh` (or `.ps1`).
+4. Sync into ChipSutra: `scripts/sync-vlsi-llm.sh` / GitHub Action.
+
+No GPU required for Path B.
 
 ## Dataset ideas (open / shareable)
 

@@ -2,6 +2,8 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
+VERSION="$(tr -d '[:space:]' < VERSION)"
+echo "[chipsutra-vlsi] building VERSION=${VERSION}"
 
 create_one() {
   local tag="$1"
@@ -9,6 +11,10 @@ create_one() {
   local file="$3"
   echo "[chipsutra-vlsi] pulling base ${base}..."
   ollama pull "${base}"
+  grep -q "v${VERSION}" "${file}" || {
+    echo "ERROR: ${file} header does not match VERSION=${VERSION}" >&2
+    exit 1
+  }
   echo "[chipsutra-vlsi] creating chipsutra-vlsi:${tag}..."
   ollama create "chipsutra-vlsi:${tag}" -f "${file}"
 }

@@ -1,8 +1,22 @@
 # ChipSutra VLSI LLM (Ollama)
 
-**Your own local verification-focused language model — no API keys, no credits, no cloud tokens.**
+**Version: 1.2.0** — [CHANGELOG.md](./CHANGELOG.md) · [docs/ACCURACY_AND_KNOWLEDGE.md](./docs/ACCURACY_AND_KNOWLEDGE.md)
 
-This repository defines **custom Ollama models** built on open-weight [Qwen2.5-Coder](https://ollama.com/library/qwen2.5-coder) bases. A Modelfile bakes in SystemVerilog / UVM / SVA / coverage expertise so ChipSutra and other tools get consistent DV output without calling Anthropic, OpenAI, or Emergent.
+**Version 1.2.0** — see [CHANGELOG.md](./CHANGELOG.md).
+
+Your own local verification-focused language model — no API keys, no credits, no cloud tokens.
+
+This repository defines **custom Ollama models** built on open-weight [Qwen2.5-Coder](https://ollama.com/library/qwen2.5-coder) bases. Modelfiles bake in an **inline SYSTEM** prompt (SystemVerilog / UVM / SVA / protocol index). ChipSutra also injects **RAG** from `prompts/vlsi_*.txt` at generate time.
+
+## Knowledge architecture
+
+The Ollama SYSTEM is inline in `modelfiles/Modelfile.*`. ChipSutra retrieves additional domain context from:
+
+- `prompts/vlsi_protocols_compact.txt`
+- `prompts/vlsi_soc_dft_power.txt`
+- `prompts/vlsi_verification_glossary.txt`
+
+`prompts/vlsi_system.txt` is a human-readable reference; Ollama does not auto-include it.
 
 ## Models
 
@@ -25,7 +39,7 @@ No Python, Node, Anthropic, OpenAI, or Emergent accounts. No API tokens after ba
 
 ## Integrated with ChipSutra
 
-Docker Compose in [ChipSutra](https://github.com/sriharshaduppalli/ChipSutra) **vendors** these Modelfiles under `models/chipsutra-vlsi/` and runs `ollama create` on first startup — you do **not** need to clone this repo for the default stack.
+Docker Compose in [ChipSutra](https://github.com/sriharshaduppalli/ChipSutra) vendors these Modelfiles under `models/chipsutra-vlsi/` and runs `ollama create` on first startup and after `VERSION` changes.
 
 Clone this repo only if you want to rebuild tags manually or use ChipSutra-VLSI in other tools (Open WebUI, scripts, etc.).
 
@@ -99,18 +113,21 @@ Works with Open WebUI, Continue, LangChain, Cursor local models, etc.
 
 ```
 modelfiles/          Modelfile.1.5b, .3b, .7b
-prompts/             Shared SYSTEM prompt (included by Modelfiles)
-scripts/             create-all.sh / .ps1, verify.sh
-docs/FINE_TUNING.md  Local LoRA path (no cloud credits)
+prompts/             SYSTEM reference + RAG knowledge corpus
+scripts/             create-all.sh/.ps1, verify.sh/.ps1
+docs/                Accuracy roadmap + optional LoRA path
+CHANGELOG.md         Release notes
+VERSION              Semver synced into ChipSutra
 LICENSE              MIT
 ```
 
 ## Updating the model
 
-1. Edit `prompts/vlsi_system.txt`, `prompts/vlsi_protocols_compact.txt`, or a `modelfiles/Modelfile.*`.
-2. Bump **`VERSION`** in repo root (semver).
-3. Re-run `scripts/create-all.sh` (or one size).
-4. Sync ChipSutra: `scripts/sync-vlsi-llm.sh` in [ChipSutra](https://github.com/sriharshaduppalli/ChipSutra) or GitHub Action **Sync ChipSutra-VLSI modelfiles**.
+1. Edit the inline SYSTEM in `modelfiles/Modelfile.*` and/or `prompts/vlsi_*.txt`.
+2. Keep `prompts/vlsi_system.txt` aligned with the 3B reference.
+3. Bump `VERSION` and update `CHANGELOG.md`.
+4. Re-run `scripts/create-all.sh` / `.ps1`.
+5. Sync ChipSutra with its sync script or GitHub Action.
 
 Accuracy roadmap: [docs/ACCURACY_AND_KNOWLEDGE.md](./docs/ACCURACY_AND_KNOWLEDGE.md).
 
