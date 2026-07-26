@@ -27,9 +27,9 @@ A **knowledge graph** (protocols ↔ signals ↔ properties ↔ coverage points)
 ### Path 1 — RAG in ChipSutra (recommended next for OSS)
 
 - Store **curated** markdown/JSON: AXI rules, CAN frame diagram, UVM patterns, debug playbooks.
-- On **Generate**, retrieve chunks (embedding search or keyword) and prepend to the user message.
-- **Pros:** Updatable without retraining; cite sources; India-friendly air-gapped if index is local.
-- **Cons:** Needs engineering in ChipSutra backend, not only this repo.
+- On **Generate**, ChipSutra retrieves chunks from `backend/knowledge/` (keyword RAG in `rag.py`) and prepends to the system prompt.
+- **Shipped** in ChipSutra main — extend `backend/knowledge/*.txt` and sync via `scripts/sync-vlsi-llm.sh`.
+- **Next:** embeddings / vector index for larger libraries; optional graph edges between protocol entities.
 
 ### Path 2 — LoRA / fine-tune (this repo + GPU)
 
