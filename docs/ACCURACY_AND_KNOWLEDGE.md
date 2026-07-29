@@ -32,7 +32,7 @@ A **knowledge graph** (protocols ↔ signals ↔ properties ↔ coverage points)
 - Store **curated** markdown/JSON: AXI rules, CAN frame diagram, UVM patterns, debug playbooks.
 - On **Generate**, ChipSutra retrieves chunks from `backend/knowledge/` (keyword RAG in `rag.py`) and prepends to the system prompt.
 - **Shipped** in ChipSutra main — extend `backend/knowledge/*.txt` and sync protocols via `scripts/sync-vlsi-llm.sh`.
-- **Shipped extras:** `uvm_patterns.txt`, `sva_patterns.txt`, `sim_debug_playbook.txt`.
+- **Shipped extras:** `uvm_patterns.txt`, `sva_patterns.txt`, `sim_debug_playbook.txt`, `covergroup_patterns.txt`.
 - **Next:** embeddings / vector index for larger libraries; optional graph edges between protocol entities.
 
 ### Path 3 — Tool-augmented generation (ChipSutra + EDA tools)

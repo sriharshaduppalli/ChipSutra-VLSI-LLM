@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.1] — 2026-07-29
+
+- Added `prompts/covergroup_patterns.txt` for ChipSutra RAG (bins, crosses, protocol coverpoints, closure workflow).
+- Sync contract: ChipSutra copies four RAG prompt files (protocols, SoC/DFT, glossary, covergroups).
+
 ## [1.2.0] — 2026-07-26
 
 - Expanded Modelfile SYSTEM protocol index (AMBA deep, Wishbone/Avalon/TileLink, PCIe/CXL, Eth/MDIO, DDR/HBM, I3C/QSPI/I2S, CAN-FD/LIN, JTAG/DFT, UCIe/BoW, CDC/UPF, RISC-V SoC glue).

@@ -1,12 +1,12 @@
 # ChipSutra VLSI LLM (Ollama)
 
-**Version: 1.2.0** — [CHANGELOG.md](./CHANGELOG.md) · [docs/ACCURACY_AND_KNOWLEDGE.md](./docs/ACCURACY_AND_KNOWLEDGE.md)
+**Version: 1.2.1** — [CHANGELOG.md](./CHANGELOG.md) · [docs/ACCURACY_AND_KNOWLEDGE.md](./docs/ACCURACY_AND_KNOWLEDGE.md)
 
-**Version 1.2.0** — see [CHANGELOG.md](./CHANGELOG.md).
+**Version 1.2.1** — see [CHANGELOG.md](./CHANGELOG.md).
 
 Your own local verification-focused language model — no API keys, no credits, no cloud tokens.
 
-This repository defines **custom Ollama models** built on open-weight [Qwen2.5-Coder](https://ollama.com/library/qwen2.5-coder) bases. Modelfiles bake in an **inline SYSTEM** prompt (SystemVerilog / UVM / SVA / protocol index). ChipSutra also injects **RAG** from `prompts/vlsi_*.txt` at generate time.
+This repository defines **custom Ollama models** built on open-weight [Qwen2.5-Coder](https://ollama.com/library/qwen2.5-coder) bases. Modelfiles bake in an **inline SYSTEM** prompt (SystemVerilog / UVM / SVA / protocol index). ChipSutra also injects **RAG** from `prompts/vlsi_*.txt` (and `covergroup_patterns.txt`) at generate time.
 
 ## Knowledge architecture
 
@@ -15,6 +15,7 @@ The Ollama SYSTEM is inline in `modelfiles/Modelfile.*`. ChipSutra retrieves add
 - `prompts/vlsi_protocols_compact.txt`
 - `prompts/vlsi_soc_dft_power.txt`
 - `prompts/vlsi_verification_glossary.txt`
+- `prompts/covergroup_patterns.txt`
 
 `prompts/vlsi_system.txt` is a human-readable reference; Ollama does not auto-include it.
 
